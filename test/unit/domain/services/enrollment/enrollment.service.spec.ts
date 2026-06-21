@@ -10,6 +10,7 @@ import { Enrollment } from '../../../../../src/domain/entities/enrollment/enroll
 import { DuplicateEnrollmentException } from '../../../../../src/domain/exceptions/enrollment/duplicate-enrollment.exception';
 import { EventNotFoundException } from '../../../../../src/domain/exceptions/event/event-not-found.exception';
 import { EnrollmentNotFoundException } from '../../../../../src/domain/exceptions/enrollment/enrollment-not-found.exception';
+import { EventStatus } from '../../../../../src/domain/entities/event/event-status.vo';
 
 describe('EnrollmentService', () => {
   let service: EnrollmentService;
@@ -209,6 +210,78 @@ describe('EnrollmentService', () => {
       await expect(service.cancel('id-inexistente')).rejects.toThrow(
         EnrollmentNotFoundException,
       );
+    });
+
+    it('NÃO deve promover suplente se o cancelamento ocorrer dentro de 12h do evento', async () => {
+      const nearEvent = Event.restore({
+        id: 'event-near',
+        title: 'Evento próximo',
+        description: 'desc',
+        organizerId: 'organizer-1',
+        startDate: new Date(Date.now() + 6 * 60 * 60 * 1000), // começa em 6h (dentro da janela de 12h)
+        endDate: new Date(Date.now() + 10 * 60 * 60 * 1000),
+        capacity: Capacity.restore(1, 1), // única vaga, ocupada
+        status: EventStatus.published(),
+        createdAt: new Date(),
+      });
+
+      const cancellingEnrollment = Enrollment.createConfirmed({
+        eventId: nearEvent.id,
+        userId: 'user-1',
+      });
+      const waitlisted = Enrollment.createWaitlisted({
+        eventId: nearEvent.id,
+        userId: 'user-2',
+        waitlistPosition: 1,
+      });
+
+      enrollmentRepository.findById.mockResolvedValue(cancellingEnrollment);
+      eventRepository.findById.mockResolvedValue(nearEvent);
+      enrollmentRepository.save.mockImplementation((e) => Promise.resolve(e));
+      eventRepository.save.mockImplementation((e) => Promise.resolve(e));
+
+      const result = await service.cancel(cancellingEnrollment.id);
+
+      expect(result.cancelled.getStatus().isCancelled()).toBe(true);
+      expect(result.promoted).toBeNull();
+      expect(nearEvent.getCapacity().getOccupied()).toBe(0); // vaga liberada, mas não reocupada
+      expect(enrollmentRepository.findNextWaitlisted).not.toHaveBeenCalled(); // nem chegou a buscar suplente
+    });
+
+    it('deve promover suplente se o cancelamento ocorrer fora da janela de 12h', async () => {
+      const farEvent = Event.restore({
+        id: 'event-far',
+        title: 'Evento distante',
+        description: 'desc',
+        organizerId: 'organizer-1',
+        startDate: new Date(Date.now() + 48 * 60 * 60 * 1000), // começa em 48h (fora da janela)
+        endDate: new Date(Date.now() + 52 * 60 * 60 * 1000),
+        capacity: Capacity.restore(1, 1),
+        status: EventStatus.published(),
+        createdAt: new Date(),
+      });
+
+      const cancellingEnrollment = Enrollment.createConfirmed({
+        eventId: farEvent.id,
+        userId: 'user-1',
+      });
+      const waitlisted = Enrollment.createWaitlisted({
+        eventId: farEvent.id,
+        userId: 'user-2',
+        waitlistPosition: 1,
+      });
+
+      enrollmentRepository.findById.mockResolvedValue(cancellingEnrollment);
+      eventRepository.findById.mockResolvedValue(farEvent);
+      enrollmentRepository.findNextWaitlisted.mockResolvedValue(waitlisted);
+      enrollmentRepository.save.mockImplementation((e) => Promise.resolve(e));
+      eventRepository.save.mockImplementation((e) => Promise.resolve(e));
+
+      const result = await service.cancel(cancellingEnrollment.id);
+
+      expect(result.promoted).not.toBeNull();
+      expect(result.promoted?.getStatus().isConfirmed()).toBe(true);
+      expect(farEvent.getCapacity().getOccupied()).toBe(1); // vaga liberada e reocupada pelo suplente
     });
   });
 });

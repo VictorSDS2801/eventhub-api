@@ -8,6 +8,7 @@ import { EventNotFoundException } from '../../exceptions/event/event-not-found.e
 import { EnrollmentNotFoundException } from '../../exceptions/enrollment/enrollment-not-found.exception';
 import { DuplicateEnrollmentException } from '../../exceptions/enrollment/duplicate-enrollment.exception';
 
+const LATE_CANCELLATION_WINDOW_HOURS = 12;
 export interface IEnrollParams {
   eventId: string;
   userId: string;
@@ -83,22 +84,38 @@ export class EnrollmentService {
       throw new EventNotFoundException(enrollment.eventId);
     }
     event.releaseSpot();
+    await this.eventRepository.save(event);
+
+    const isLateCancellation = this.isWithinLateCancellationWindow(
+      event.getStartDate(),
+    );
+    if (isLateCancellation) {
+      // cancelamento tardio: vaga fica liberada, mas ninguém é promovido
+      return { cancelled, promoted: null };
+    }
 
     const nextInLine = await this.enrollmentRepository.findNextWaitlisted(
       enrollment.eventId,
     );
     if (!nextInLine) {
-      await this.eventRepository.save(event);
       return { cancelled, promoted: null };
     }
 
     nextInLine.promoteFromWaitlist();
     event.occupySpot();
-
     await this.eventRepository.save(event);
     const promoted = await this.enrollmentRepository.save(nextInLine);
 
     return { cancelled, promoted };
+  }
+
+  private isWithinLateCancellationWindow(
+    eventStartDate: Date,
+    now: Date = new Date(),
+  ): boolean {
+    const hoursUntilEvent =
+      (eventStartDate.getTime() - now.getTime()) / (1000 * 60 * 60);
+    return hoursUntilEvent < LATE_CANCELLATION_WINDOW_HOURS;
   }
 
   async findByEvent(eventId: string): Promise<Enrollment[]> {

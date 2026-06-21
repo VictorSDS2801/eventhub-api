@@ -1,25 +1,19 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CheckInService } from './check-in.service';
-import {
-  I_CHECKIN_REPOSITORY,
-  ICheckInRepository,
-} from '../repositories/check-in.repository.interface';
-import {
-  I_ENROLLMENT_REPOSITORY,
-  IEnrollmentRepository,
-} from '../repositories/enrollment.repository.interface';
-import {
-  I_EVENT_REPOSITORY,
-  IEventRepository,
-} from '../repositories/event.repository.interface';
-import { Event } from '../entities/event/event';
-import { Capacity } from '../entities/event/capacity.vo';
-import { Enrollment } from '../entities/enrollment/enrollment';
-import { EnrollmentNotConfirmedException } from '../exceptions/enrollment-not-confirmed.exception';
-import { DuplicateCheckInException } from '../exceptions/duplicate-checkin.exception';
-import { EnrollmentNotFoundException } from '../exceptions/enrollment/enrollment-not-found.exception';
-import { CheckInWindowClosedException } from '../exceptions/checkin-window-closed.exception';
-import { EventStatus } from '../entities/event/event-status.vo';
+import { I_CHECKIN_REPOSITORY } from '../../repositories/check-in.repository.interface';
+import type { ICheckInRepository } from '../../repositories/check-in.repository.interface';
+import { I_ENROLLMENT_REPOSITORY } from '../../repositories/enrollment.repository.interface';
+import type { IEnrollmentRepository } from '../../repositories/enrollment.repository.interface';
+import { I_EVENT_REPOSITORY } from '../../repositories/event.repository.interface';
+import type { IEventRepository } from '../../repositories/event.repository.interface';
+import { Event } from '../../entities/event/event';
+import { Capacity } from '../../entities/event/capacity.vo';
+import { Enrollment } from '../../entities/enrollment/enrollment';
+import { EnrollmentNotConfirmedException } from '../../exceptions/check-in/enrollment-not-confirmed.exception';
+import { DuplicateCheckInException } from '../../exceptions/check-in/duplicate-checkin.exception';
+import { EnrollmentNotFoundException } from '../../exceptions/enrollment/enrollment-not-found.exception';
+import { CheckInWindowClosedException } from '../../exceptions/check-in/checkin-window-closed.exception';
+import { EventStatus } from '../../entities/event/event-status.vo';
 
 describe('CheckInService', () => {
   let service: CheckInService;

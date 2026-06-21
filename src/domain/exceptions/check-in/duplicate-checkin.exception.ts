@@ -1,4 +1,4 @@
-import { DomainException } from './domain.exception';
+import { DomainException } from '../domain.exception';
 
 export class DuplicateCheckInException extends DomainException {
   constructor(enrollmentId: string) {

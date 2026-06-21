@@ -1,5 +1,5 @@
 import { randomUUID } from 'crypto';
-import { CheckInWindowClosedException } from '../exceptions/checkin-window-closed.exception';
+import { CheckInWindowClosedException } from '../../exceptions/check-in/checkin-window-closed.exception';
 
 export interface ICheckInProps {
   id?: string;

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { CheckIn } from '../../../domain/entities/check-in';
+import { CheckIn } from '../../../domain/entities/check-in/check-in';
 import type { ICheckInRepository } from '../../../domain/repositories/check-in.repository.interface';
 import {
   CheckInDocument,

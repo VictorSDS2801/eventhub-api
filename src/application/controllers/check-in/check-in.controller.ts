@@ -1,4 +1,3 @@
-// src/application/controllers/check-in.controller.ts
 import {
   Controller,
   Post,
@@ -8,9 +7,9 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
-import { CheckInService } from '../../domain/services/check-in.service';
-import { CheckInResponseDto } from '../dtos/check-in-response.dto';
-import { JwtAuthGuard } from '../../infrastructure/shared/guards/jwt-auth.guard';
+import { CheckInService } from '../../../domain/services/check-in/check-in.service';
+import { CheckInResponseDto } from '../../dtos/check-in/check-in-response.dto';
+import { JwtAuthGuard } from '../../../infrastructure/shared/guards/jwt-auth.guard';
 
 @Controller('check-ins')
 @UseGuards(JwtAuthGuard)

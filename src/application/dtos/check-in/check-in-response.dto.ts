@@ -1,4 +1,4 @@
-import { CheckIn } from '../../domain/entities/check-in';
+import { CheckIn } from '../../../domain/entities/check-in/check-in';
 
 export class CheckInResponseDto {
   id!: string;

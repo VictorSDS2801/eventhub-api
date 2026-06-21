@@ -1,4 +1,4 @@
-import { CheckIn } from '../entities/check-in';
+import { CheckIn } from '../entities/check-in/check-in';
 
 export const I_CHECKIN_REPOSITORY = 'I_CHECKIN_REPOSITORY';
 

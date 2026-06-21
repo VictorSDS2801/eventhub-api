@@ -8,8 +8,8 @@ import { I_PASSWORD_HASHER } from './domain/ports/password-hasher.port';
 import { I_TOKEN_PROVIDER } from './domain/ports/token-provider.port';
 import { BcryptPasswordHasherAdapter } from './infrastructure/adapters/bcrypt-password-hasher.adapter';
 import { JwtTokenProviderAdapter } from './infrastructure/adapters/jwt-token-provider.adapter';
-import { JwtAuthGuard } from './infrastructure/shared/guard/jwt-auth.guard';
-import { RolesGuard } from './infrastructure/shared/guard/roles.guard';
+import { JwtAuthGuard } from './infrastructure/shared/guards/jwt-auth.guard';
+import { RolesGuard } from './infrastructure/shared/guards/roles.guard';
 
 @Module({
   imports: [

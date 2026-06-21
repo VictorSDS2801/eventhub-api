@@ -13,7 +13,7 @@ import { EnrollmentService } from '../../domain/services/enrollment.service';
 import { EnrollDto } from '../dtos/enroll.dto';
 import { EnrollmentResponseDto } from '../dtos/enrollment-response.dto';
 import { CancellationResponseDto } from '../dtos/cancellation-response.dto';
-import { JwtAuthGuard } from '../../infrastructure/shared/guard/jwt-auth.guard';
+import { JwtAuthGuard } from '../../infrastructure/shared/guards/jwt-auth.guard';
 import { CurrentUser } from '../../infrastructure/shared/decorators/current-user.decorator';
 import type { ITokenPayload } from '../../domain/ports/token-provider.port';
 

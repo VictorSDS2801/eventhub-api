@@ -13,9 +13,9 @@ import {
 import { EventService } from '../../domain/services/event.service';
 import { CreateEventDto } from '../dtos/create-event.dto';
 import { EventResponseDto } from '../dtos/event-response.dto';
-import { JwtAuthGuard } from '../../infrastructure/shared/guard/jwt-auth.guard';
-import { RolesGuard } from '../../infrastructure/shared/guard/roles.guard';
-import { Roles } from '../../infrastructure/shared/guard/roles.decorator';
+import { JwtAuthGuard } from '../../infrastructure/shared/guards/jwt-auth.guard';
+import { RolesGuard } from '../../infrastructure/shared/guards/roles.guard';
+import { Roles } from '../../infrastructure/shared/guards/roles.decorator';
 import { RoleEnum } from '../../domain/entities/role.vo';
 
 @Controller('events')

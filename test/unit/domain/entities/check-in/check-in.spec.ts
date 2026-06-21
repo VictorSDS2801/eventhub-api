@@ -1,5 +1,5 @@
-import { CheckIn } from './check-in';
-import { CheckInWindowClosedException } from '../../exceptions/check-in/checkin-window-closed.exception';
+import { CheckIn } from '../../../../../src/domain/entities/check-in/check-in';
+import { CheckInWindowClosedException } from '../../../../../src/domain/exceptions/check-in/checkin-window-closed.exception';
 
 describe('CheckIn', () => {
   const eventStartDate = new Date('2026-09-01T10:00:00.000Z');

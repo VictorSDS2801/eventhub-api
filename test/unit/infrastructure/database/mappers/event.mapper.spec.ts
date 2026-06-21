@@ -1,7 +1,7 @@
-import { EventMapper } from './event.mapper';
-import { Event } from '../../../domain/entities/event/event';
-import { Capacity } from '../../../domain/entities/event/capacity.vo';
-import { EventDocument } from '../schemas/event.schema';
+import { EventMapper } from '../../../../../src/infrastructure/database/mappers/event.mapper';
+import { Event } from '../../../../../src/domain/entities/event/event';
+import { Capacity } from '../../../../../src/domain/entities/event/capacity.vo';
+import { EventDocument } from '../../../../../src/infrastructure/database/schemas/event.schema';
 
 describe('EventMapper', () => {
   const futureStartDate = new Date(Date.now() + 24 * 60 * 60 * 1000);

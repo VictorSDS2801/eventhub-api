@@ -1,15 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { EnrollmentService } from './enrollment.service';
-import { I_ENROLLMENT_REPOSITORY } from '../../repositories/enrollment.repository.interface';
-import type { IEnrollmentRepository } from '../../repositories/enrollment.repository.interface';
-import { I_EVENT_REPOSITORY } from '../../repositories/event.repository.interface';
-import type { IEventRepository } from '../../repositories/event.repository.interface';
-import { Event } from '../../entities/event/event';
-import { Capacity } from '../../entities/event/capacity.vo';
-import { Enrollment } from '../../entities/enrollment/enrollment';
-import { DuplicateEnrollmentException } from '../../exceptions/enrollment/duplicate-enrollment.exception';
-import { EventNotFoundException } from '../../exceptions/event/event-not-found.exception';
-import { EnrollmentNotFoundException } from '../../exceptions/enrollment/enrollment-not-found.exception';
+import { EnrollmentService } from '../../../../../src/domain/services/enrollment/enrollment.service';
+import { I_ENROLLMENT_REPOSITORY } from '../../../../../src/domain/repositories/enrollment.repository.interface';
+import type { IEnrollmentRepository } from '../../../../../src/domain/repositories/enrollment.repository.interface';
+import { I_EVENT_REPOSITORY } from '../../../../../src/domain/repositories/event.repository.interface';
+import type { IEventRepository } from '../../../../../src/domain/repositories/event.repository.interface';
+import { Event } from '../../../../../src/domain/entities/event/event';
+import { Capacity } from '../../../../../src/domain/entities/event/capacity.vo';
+import { Enrollment } from '../../../../../src/domain/entities/enrollment/enrollment';
+import { DuplicateEnrollmentException } from '../../../../../src/domain/exceptions/enrollment/duplicate-enrollment.exception';
+import { EventNotFoundException } from '../../../../../src/domain/exceptions/event/event-not-found.exception';
+import { EnrollmentNotFoundException } from '../../../../../src/domain/exceptions/enrollment/enrollment-not-found.exception';
 
 describe('EnrollmentService', () => {
   let service: EnrollmentService;

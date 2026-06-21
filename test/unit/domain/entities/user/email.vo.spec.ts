@@ -1,4 +1,4 @@
-import { Email, InvalidEmailException } from './email.vo';
+import { Email, InvalidEmailException } from '../../../../../src/domain/entities/user/email.vo';
 
 describe('Email', () => {
   it('deve criar um e-mail válido', () => {

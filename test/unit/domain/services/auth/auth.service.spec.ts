@@ -1,16 +1,16 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { AuthService } from './auth.service';
-import { I_USER_REPOSITORY } from '../../repositories/user.repository.interface';
-import type { IUserRepository } from '../../repositories/user.repository.interface';
-import { I_PASSWORD_HASHER } from '../../ports/password-hasher.port';
-import type { IPasswordHasher } from '../../ports/password-hasher.port';
-import { I_TOKEN_PROVIDER } from '../../ports/token-provider.port';
-import type { ITokenProvider } from '../../ports/token-provider.port';
-import { EmailAlreadyInUseException } from '../../exceptions/auth/email-already-in-use.exception';
-import { InvalidCredentialsException } from '../../exceptions/auth/invalid-credentials.exception';
-import { User } from '../../entities/user/user';
-import { Email } from '../../entities/user/email.vo';
-import { Role } from '../../entities/user/role.vo';
+import { AuthService } from '../../../../../src/domain/services/auth/auth.service';
+import { I_USER_REPOSITORY } from '../../../../../src/domain/repositories/user.repository.interface';
+import type { IUserRepository } from '../../../../../src/domain/repositories/user.repository.interface';
+import { I_PASSWORD_HASHER } from '../../../../../src/domain/ports/password-hasher.port';
+import type { IPasswordHasher } from '../../../../../src/domain/ports/password-hasher.port';
+import { I_TOKEN_PROVIDER } from '../../../../../src/domain/ports/token-provider.port';
+import type { ITokenProvider } from '../../../../../src/domain/ports/token-provider.port';
+import { EmailAlreadyInUseException } from '../../../../../src/domain/exceptions/auth/email-already-in-use.exception';
+import { InvalidCredentialsException } from '../../../../../src/domain/exceptions/auth/invalid-credentials.exception';
+import { User } from '../../../../../src/domain/entities/user/user';
+import { Email } from '../../../../../src/domain/entities/user/email.vo';
+import { Role } from '../../../../../src/domain/entities/user/role.vo';
 
 describe('AuthService', () => {
   let service: AuthService;

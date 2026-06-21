@@ -1,6 +1,6 @@
-import { User } from './user';
-import { Email } from './email.vo';
-import { Role } from './role.vo';
+import { User } from '../../../../../src/domain/entities/user/user';
+import { Email } from '../../../../../src/domain/entities/user/email.vo';
+import { Role } from '../../../../../src/domain/entities/user/role.vo';
 
 describe('User', () => {
   const buildValidUser = () =>

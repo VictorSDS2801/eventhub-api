@@ -1,7 +1,7 @@
-import { Event } from './event';
-import { Capacity } from './capacity.vo';
-import { CapacityExceededException } from '../../exceptions/event/capacity-exceeded.exception';
-import { EventAlreadyFinishedException } from '../../exceptions/event/event-already-finished.exception';
+import { Event } from '../../../../../src/domain/entities/event/event';
+import { Capacity } from '../../../../../src/domain/entities/event/capacity.vo';
+import { CapacityExceededException } from '../../../../../src/domain/exceptions/event/capacity-exceeded.exception';
+import { EventAlreadyFinishedException } from '../../../../../src/domain/exceptions/event/event-already-finished.exception';
 
 describe('Event', () => {
   const futureStartDate = new Date(Date.now() + 24 * 60 * 60 * 1000);

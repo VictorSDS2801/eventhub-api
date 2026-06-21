@@ -1,19 +1,19 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { CheckInService } from './check-in.service';
-import { I_CHECKIN_REPOSITORY } from '../../repositories/check-in.repository.interface';
-import type { ICheckInRepository } from '../../repositories/check-in.repository.interface';
-import { I_ENROLLMENT_REPOSITORY } from '../../repositories/enrollment.repository.interface';
-import type { IEnrollmentRepository } from '../../repositories/enrollment.repository.interface';
-import { I_EVENT_REPOSITORY } from '../../repositories/event.repository.interface';
-import type { IEventRepository } from '../../repositories/event.repository.interface';
-import { Event } from '../../entities/event/event';
-import { Capacity } from '../../entities/event/capacity.vo';
-import { Enrollment } from '../../entities/enrollment/enrollment';
-import { EnrollmentNotConfirmedException } from '../../exceptions/check-in/enrollment-not-confirmed.exception';
-import { DuplicateCheckInException } from '../../exceptions/check-in/duplicate-checkin.exception';
-import { EnrollmentNotFoundException } from '../../exceptions/enrollment/enrollment-not-found.exception';
-import { CheckInWindowClosedException } from '../../exceptions/check-in/checkin-window-closed.exception';
-import { EventStatus } from '../../entities/event/event-status.vo';
+import { CheckInService } from '../../../../../src/domain/services/check-in/check-in.service';
+import { I_CHECKIN_REPOSITORY } from '../../../../../src/domain/repositories/check-in.repository.interface';
+import type { ICheckInRepository } from '../../../../../src/domain/repositories/check-in.repository.interface';
+import { I_ENROLLMENT_REPOSITORY } from '../../../../../src/domain/repositories/enrollment.repository.interface';
+import type { IEnrollmentRepository } from '../../../../../src/domain/repositories/enrollment.repository.interface';
+import { I_EVENT_REPOSITORY } from '../../../../../src/domain/repositories/event.repository.interface';
+import type { IEventRepository } from '../../../../../src/domain/repositories/event.repository.interface';
+import { Event } from '../../../../../src/domain/entities/event/event';
+import { Capacity } from '../../../../../src/domain/entities/event/capacity.vo';
+import { Enrollment } from '../../../../../src/domain/entities/enrollment/enrollment';
+import { EnrollmentNotConfirmedException } from '../../../../../src/domain/exceptions/check-in/enrollment-not-confirmed.exception';
+import { DuplicateCheckInException } from '../../../../../src/domain/exceptions/check-in/duplicate-checkin.exception';
+import { EnrollmentNotFoundException } from '../../../../../src/domain/exceptions/enrollment/enrollment-not-found.exception';
+import { CheckInWindowClosedException } from '../../../../../src/domain/exceptions/check-in/checkin-window-closed.exception';
+import { EventStatus } from '../../../../../src/domain/entities/event/event-status.vo';
 
 describe('CheckInService', () => {
   let service: CheckInService;

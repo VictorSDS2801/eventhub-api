@@ -1,5 +1,8 @@
-import { Enrollment, InvalidWaitlistPositionException } from './enrollment';
-import { EnrollmentAlreadyCancelledException } from '../../exceptions/enrollment/enrollment-already-cancelled.exception';
+import {
+  Enrollment,
+  InvalidWaitlistPositionException,
+} from '../../../../../src/domain/entities/enrollment/enrollment';
+import { EnrollmentAlreadyCancelledException } from '../../../../../src/domain/exceptions/enrollment/enrollment-already-cancelled.exception';
 
 describe('Enrollment', () => {
   describe('createConfirmed', () => {
@@ -40,7 +43,10 @@ describe('Enrollment', () => {
 
   describe('cancel', () => {
     it('deve cancelar uma inscrição confirmada', () => {
-      const enrollment = Enrollment.createConfirmed({ eventId: 'event-1', userId: 'user-1' });
+      const enrollment = Enrollment.createConfirmed({
+        eventId: 'event-1',
+        userId: 'user-1',
+      });
       enrollment.cancel();
 
       expect(enrollment.getStatus().isCancelled()).toBe(true);
@@ -60,10 +66,15 @@ describe('Enrollment', () => {
     });
 
     it('não deve permitir cancelar uma inscrição já cancelada', () => {
-      const enrollment = Enrollment.createConfirmed({ eventId: 'event-1', userId: 'user-1' });
+      const enrollment = Enrollment.createConfirmed({
+        eventId: 'event-1',
+        userId: 'user-1',
+      });
       enrollment.cancel();
 
-      expect(() => enrollment.cancel()).toThrow(EnrollmentAlreadyCancelledException);
+      expect(() => enrollment.cancel()).toThrow(
+        EnrollmentAlreadyCancelledException,
+      );
     });
   });
 
@@ -81,9 +92,14 @@ describe('Enrollment', () => {
     });
 
     it('não deve permitir promover uma inscrição que já está confirmada', () => {
-      const enrollment = Enrollment.createConfirmed({ eventId: 'event-1', userId: 'user-1' });
+      const enrollment = Enrollment.createConfirmed({
+        eventId: 'event-1',
+        userId: 'user-1',
+      });
 
-      expect(() => enrollment.promoteFromWaitlist()).toThrow(InvalidWaitlistPositionException);
+      expect(() => enrollment.promoteFromWaitlist()).toThrow(
+        InvalidWaitlistPositionException,
+      );
     });
   });
 });

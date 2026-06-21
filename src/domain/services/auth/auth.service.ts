@@ -1,15 +1,15 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { User } from '../entities/user';
-import { Email } from '../entities/email.vo';
-import { Role, RoleEnum } from '../entities/role.vo';
-import { I_USER_REPOSITORY } from '../repositories/user.repository.interface';
-import type { IUserRepository } from '../repositories/user.repository.interface';
-import { I_PASSWORD_HASHER } from '../ports/password-hasher.port';
-import type { IPasswordHasher } from '../ports/password-hasher.port';
-import { I_TOKEN_PROVIDER } from '../ports/token-provider.port';
-import type { ITokenProvider } from '../ports/token-provider.port';
-import { InvalidCredentialsException } from '../exceptions/invalid-credentials.exception';
-import { EmailAlreadyInUseException } from '../exceptions/email-already-in-use.exception';
+import { User } from '../../entities/user/user';
+import { Email } from '../../entities/user/email.vo';
+import { Role, RoleEnum } from '../../entities/user/role.vo';
+import { I_USER_REPOSITORY } from '../../repositories/user.repository.interface';
+import type { IUserRepository } from '../../repositories/user.repository.interface';
+import { I_PASSWORD_HASHER } from '../../ports/password-hasher.port';
+import type { IPasswordHasher } from '../../ports/password-hasher.port';
+import { I_TOKEN_PROVIDER } from '../../ports/token-provider.port';
+import type { ITokenProvider } from '../../ports/token-provider.port';
+import { InvalidCredentialsException } from '../../exceptions/auth/invalid-credentials.exception';
+import { EmailAlreadyInUseException } from '../../exceptions/auth/email-already-in-use.exception';
 
 export interface IRegisterParams {
   name: string;

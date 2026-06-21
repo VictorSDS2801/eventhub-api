@@ -1,4 +1,4 @@
-import { DomainException } from './domain.exception';
+import { DomainException } from '../domain.exception';
 
 export class EmailAlreadyInUseException extends DomainException {
   constructor(email: string) {

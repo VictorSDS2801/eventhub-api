@@ -1,4 +1,4 @@
-import { IAuthResult } from '../../domain/services/auth.service';
+import type { IAuthResult } from '../../../domain/services/auth/auth.service';
 
 export class AuthResponseDto {
   accessToken!: string;

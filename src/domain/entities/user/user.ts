@@ -1,7 +1,7 @@
 import { randomUUID } from 'crypto';
 import { Email } from './email.vo';
 import { Role } from './role.vo';
-import { DomainException } from '../exceptions/domain.exception';
+import { DomainException } from '../../exceptions/domain.exception';
 
 export class InvalidUserNameException extends DomainException {
   constructor() {

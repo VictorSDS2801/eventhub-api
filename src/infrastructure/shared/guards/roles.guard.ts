@@ -7,7 +7,7 @@ import {
 import { Reflector } from '@nestjs/core';
 import { Request } from 'express';
 import { ROLES_KEY } from './roles.decorator';
-import { RoleEnum } from '../../../domain/entities/role.vo';
+import { RoleEnum } from '../../../domain/entities/user/role.vo';
 import { ITokenPayload } from '../../../domain/ports/token-provider.port';
 
 @Injectable()

@@ -16,7 +16,7 @@ import { EventResponseDto } from '../../dtos/event/event-response.dto';
 import { JwtAuthGuard } from '../../../infrastructure/shared/guards/jwt-auth.guard';
 import { RolesGuard } from '../../../infrastructure/shared/guards/roles.guard';
 import { Roles } from '../../../infrastructure/shared/guards/roles.decorator';
-import { RoleEnum } from '../../../domain/entities/role.vo';
+import { RoleEnum } from '../../../domain/entities/user/role.vo';
 
 @Controller('events')
 export class EventController {

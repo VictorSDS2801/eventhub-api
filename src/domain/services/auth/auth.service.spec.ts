@@ -1,19 +1,16 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from './auth.service';
-import {
-  I_USER_REPOSITORY,
-  IUserRepository,
-} from '../repositories/user.repository.interface';
-import {
-  I_PASSWORD_HASHER,
-  IPasswordHasher,
-} from '../ports/password-hasher.port';
-import { I_TOKEN_PROVIDER, ITokenProvider } from '../ports/token-provider.port';
-import { EmailAlreadyInUseException } from '../exceptions/email-already-in-use.exception';
-import { InvalidCredentialsException } from '../exceptions/invalid-credentials.exception';
-import { User } from '../entities/user';
-import { Email } from '../entities/email.vo';
-import { Role } from '../entities/role.vo';
+import { I_USER_REPOSITORY } from '../../repositories/user.repository.interface';
+import type { IUserRepository } from '../../repositories/user.repository.interface';
+import { I_PASSWORD_HASHER } from '../../ports/password-hasher.port';
+import type { IPasswordHasher } from '../../ports/password-hasher.port';
+import { I_TOKEN_PROVIDER } from '../../ports/token-provider.port';
+import type { ITokenProvider } from '../../ports/token-provider.port';
+import { EmailAlreadyInUseException } from '../../exceptions/auth/email-already-in-use.exception';
+import { InvalidCredentialsException } from '../../exceptions/auth/invalid-credentials.exception';
+import { User } from '../../entities/user/user';
+import { Email } from '../../entities/user/email.vo';
+import { Role } from '../../entities/user/role.vo';
 
 describe('AuthService', () => {
   let service: AuthService;

@@ -1,6 +1,6 @@
-import { User } from '../../../domain/entities/user';
-import { Email } from '../../../domain/entities/email.vo';
-import { Role, RoleEnum } from '../../../domain/entities/role.vo';
+import { User } from '../../../domain/entities/user/user';
+import { Email } from '../../../domain/entities/user/email.vo';
+import { Role, RoleEnum } from '../../../domain/entities/user/role.vo';
 import { UserDocument } from '../schemas/user.schema';
 
 export class UserMapper {

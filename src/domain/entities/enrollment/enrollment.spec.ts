@@ -1,5 +1,5 @@
 import { Enrollment, InvalidWaitlistPositionException } from './enrollment';
-import { EnrollmentAlreadyCancelledException } from '../exceptions/enrollment-already-cancelled.exception';
+import { EnrollmentAlreadyCancelledException } from '../../exceptions/enrollment/enrollment-already-cancelled.exception';
 
 describe('Enrollment', () => {
   describe('createConfirmed', () => {

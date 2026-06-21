@@ -1,7 +1,7 @@
 import { randomUUID } from 'crypto';
 import { EnrollmentStatus } from './enrollment-status.vo';
-import { DomainException } from '../exceptions/domain.exception';
-import { EnrollmentAlreadyCancelledException } from '../exceptions/enrollment-already-cancelled.exception';
+import { DomainException } from '../../exceptions/domain.exception';
+import { EnrollmentAlreadyCancelledException } from '../../exceptions/enrollment/enrollment-already-cancelled.exception';
 
 export class InvalidWaitlistPositionException extends DomainException {
   constructor() {

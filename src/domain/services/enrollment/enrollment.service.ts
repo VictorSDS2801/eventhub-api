@@ -1,12 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Enrollment } from '../entities/enrollment';
-import { I_ENROLLMENT_REPOSITORY } from '../repositories/enrollment.repository.interface';
-import type { IEnrollmentRepository } from '../repositories/enrollment.repository.interface';
-import { I_EVENT_REPOSITORY } from '../repositories/event.repository.interface';
-import type { IEventRepository } from '../repositories/event.repository.interface';
-import { EventNotFoundException } from '../exceptions/event/event-not-found.exception';
-import { EnrollmentNotFoundException } from '../exceptions/enrollment-not-found.exception';
-import { DuplicateEnrollmentException } from '../exceptions/duplicate-enrollment.exception';
+import { Enrollment } from '../../entities/enrollment/enrollment';
+import { I_ENROLLMENT_REPOSITORY } from '../../repositories/enrollment.repository.interface';
+import type { IEnrollmentRepository } from '../../repositories/enrollment.repository.interface';
+import { I_EVENT_REPOSITORY } from '../../repositories/event.repository.interface';
+import type { IEventRepository } from '../../repositories/event.repository.interface';
+import { EventNotFoundException } from '../../exceptions/event/event-not-found.exception';
+import { EnrollmentNotFoundException } from '../../exceptions/enrollment/enrollment-not-found.exception';
+import { DuplicateEnrollmentException } from '../../exceptions/enrollment/duplicate-enrollment.exception';
 
 export interface IEnrollParams {
   eventId: string;

@@ -6,7 +6,7 @@ import { I_ENROLLMENT_REPOSITORY } from '../repositories/enrollment.repository.i
 import type { IEnrollmentRepository } from '../repositories/enrollment.repository.interface';
 import { I_EVENT_REPOSITORY } from '../repositories/event.repository.interface';
 import type { IEventRepository } from '../repositories/event.repository.interface';
-import { EnrollmentNotFoundException } from '../exceptions/enrollment-not-found.exception';
+import { EnrollmentNotFoundException } from '../exceptions/enrollment/enrollment-not-found.exception';
 import { EventNotFoundException } from '../exceptions/event/event-not-found.exception';
 import { EnrollmentNotConfirmedException } from '../exceptions/enrollment-not-confirmed.exception';
 import { DuplicateCheckInException } from '../exceptions/duplicate-checkin.exception';

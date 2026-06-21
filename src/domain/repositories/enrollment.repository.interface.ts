@@ -1,4 +1,4 @@
-import { Enrollment } from '../entities/enrollment';
+import { Enrollment } from '../entities/enrollment/enrollment';
 
 export const I_ENROLLMENT_REPOSITORY = 'I_ENROLLMENT_REPOSITORY';
 

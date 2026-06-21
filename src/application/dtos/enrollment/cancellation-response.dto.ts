@@ -1,4 +1,4 @@
-import { IEnrollmentCancellationResult } from '../../domain/services/enrollment.service';
+import type { IEnrollmentCancellationResult } from '../../../domain/services/enrollment/enrollment.service';
 import { EnrollmentResponseDto } from './enrollment-response.dto';
 
 export class CancellationResponseDto {

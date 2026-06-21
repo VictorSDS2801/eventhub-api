@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Enrollment } from '../../../domain/entities/enrollment';
+import { Enrollment } from '../../../domain/entities/enrollment/enrollment';
 import type { IEnrollmentRepository } from '../../../domain/repositories/enrollment.repository.interface';
 import {
   EnrollmentDocument,

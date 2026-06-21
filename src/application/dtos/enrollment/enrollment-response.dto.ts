@@ -1,4 +1,4 @@
-import { Enrollment } from '../../domain/entities/enrollment';
+import { Enrollment } from '../../../domain/entities/enrollment/enrollment';
 
 export class EnrollmentResponseDto {
   id!: string;

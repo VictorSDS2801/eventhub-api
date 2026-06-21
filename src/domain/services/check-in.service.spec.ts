@@ -14,10 +14,10 @@ import {
 } from '../repositories/event.repository.interface';
 import { Event } from '../entities/event/event';
 import { Capacity } from '../entities/event/capacity.vo';
-import { Enrollment } from '../entities/enrollment';
+import { Enrollment } from '../entities/enrollment/enrollment';
 import { EnrollmentNotConfirmedException } from '../exceptions/enrollment-not-confirmed.exception';
 import { DuplicateCheckInException } from '../exceptions/duplicate-checkin.exception';
-import { EnrollmentNotFoundException } from '../exceptions/enrollment-not-found.exception';
+import { EnrollmentNotFoundException } from '../exceptions/enrollment/enrollment-not-found.exception';
 import { CheckInWindowClosedException } from '../exceptions/checkin-window-closed.exception';
 import { EventStatus } from '../entities/event/event-status.vo';
 

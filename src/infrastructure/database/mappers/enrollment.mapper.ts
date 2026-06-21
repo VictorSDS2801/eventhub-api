@@ -1,8 +1,8 @@
-import { Enrollment } from '../../../domain/entities/enrollment';
+import { Enrollment } from '../../../domain/entities/enrollment/enrollment';
 import {
   EnrollmentStatus,
   EnrollmentStatusEnum,
-} from '../../../domain/entities/enrollment-status.vo';
+} from '../../../domain/entities/enrollment/enrollment-status.vo';
 import { EnrollmentDocument } from '../schemas/enrollment.schema';
 
 export class EnrollmentMapper {

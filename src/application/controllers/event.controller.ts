@@ -8,16 +8,23 @@ import {
   Query,
   HttpCode,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
 import { EventService } from '../../domain/services/event.service';
 import { CreateEventDto } from '../dtos/create-event.dto';
 import { EventResponseDto } from '../dtos/event-response.dto';
+import { JwtAuthGuard } from '../../infrastructure/shared/guard/jwt-auth.guard';
+import { RolesGuard } from '../../infrastructure/shared/guard/roles.guard';
+import { Roles } from '../../infrastructure/shared/guard/roles.decorator';
+import { RoleEnum } from '../../domain/entities/role.vo';
 
 @Controller('events')
 export class EventController {
   constructor(private readonly eventService: EventService) {}
 
   @Post()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(RoleEnum.ORGANIZER, RoleEnum.ADMIN)
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() dto: CreateEventDto): Promise<EventResponseDto> {
     const event = await this.eventService.createEvent({
@@ -28,7 +35,6 @@ export class EventController {
       endDate: new Date(dto.endDate),
       capacityTotal: dto.capacityTotal,
     });
-
     return EventResponseDto.fromDomain(event);
   }
 
@@ -51,17 +57,20 @@ export class EventController {
       page: page ? parseInt(page, 10) : undefined,
       limit: limit ? parseInt(limit, 10) : undefined,
     });
-
     return events.map((event) => EventResponseDto.fromDomain(event));
   }
 
   @Patch(':id/publish')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(RoleEnum.ORGANIZER, RoleEnum.ADMIN)
   async publish(@Param('id') id: string): Promise<EventResponseDto> {
     const event = await this.eventService.publishEvent(id);
     return EventResponseDto.fromDomain(event);
   }
 
   @Patch(':id/cancel')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(RoleEnum.ORGANIZER, RoleEnum.ADMIN)
   async cancel(@Param('id') id: string): Promise<EventResponseDto> {
     const event = await this.eventService.cancelEvent(id);
     return EventResponseDto.fromDomain(event);

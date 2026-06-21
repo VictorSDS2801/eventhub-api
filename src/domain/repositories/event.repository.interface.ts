@@ -1,4 +1,4 @@
-import { Event } from '../entities/event';
+import { Event } from '../entities/event/event';
 
 export const I_EVENT_REPOSITORY = 'I_EVENT_REPOSITORY';
 

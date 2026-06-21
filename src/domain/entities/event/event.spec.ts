@@ -1,7 +1,7 @@
 import { Event } from './event';
 import { Capacity } from './capacity.vo';
-import { CapacityExceededException } from '../exceptions/capacity-exceeded.exception';
-import { EventAlreadyFinishedException } from '../exceptions/event-already-finished.exception';
+import { CapacityExceededException } from '../../exceptions/event/capacity-exceeded.exception';
+import { EventAlreadyFinishedException } from '../../exceptions/event/event-already-finished.exception';
 
 describe('Event', () => {
   const futureStartDate = new Date(Date.now() + 24 * 60 * 60 * 1000);

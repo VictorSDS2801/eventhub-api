@@ -1,4 +1,4 @@
-import { DomainException } from './domain.exception';
+import { DomainException } from '../domain.exception';
 
 export class EventAlreadyFinishedException extends DomainException {
   constructor(eventId: string) {

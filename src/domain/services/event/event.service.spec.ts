@@ -1,12 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { EventService } from './event.service';
-import {
-  I_EVENT_REPOSITORY,
-  IEventRepository,
-} from '../repositories/event.repository.interface';
-import { EventNotFoundException } from '../exceptions/event-not-found.exception';
-import { Event } from '../entities/event';
-import { Capacity } from '../entities/capacity.vo';
+import { I_EVENT_REPOSITORY } from '../../repositories/event.repository.interface';
+import type { IEventRepository } from '../../repositories/event.repository.interface';
+import { Event } from '../../entities/event/event';
+import { Capacity } from '../../entities/event/capacity.vo';
+import { EventNotFoundException } from '../../exceptions/event/event-not-found.exception';
 
 describe('EventService', () => {
   let service: EventService;

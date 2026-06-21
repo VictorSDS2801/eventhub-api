@@ -1,9 +1,9 @@
 import { randomUUID } from 'crypto';
 import { Capacity } from './capacity.vo';
 import { EventStatus } from './event-status.vo';
-import { CapacityExceededException } from '../exceptions/capacity-exceeded.exception';
-import { EventAlreadyFinishedException } from '../exceptions/event-already-finished.exception';
-import { DomainException } from '../exceptions/domain.exception';
+import { CapacityExceededException } from '../../exceptions/event/capacity-exceeded.exception';
+import { EventAlreadyFinishedException } from '../../exceptions/event/event-already-finished.exception';
+import { DomainException } from '../../exceptions/domain.exception';
 
 export class InvalidEventDateException extends DomainException {
   constructor(reason: string) {

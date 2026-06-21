@@ -1,4 +1,4 @@
-import { DomainException } from './domain.exception';
+import { DomainException } from '../domain.exception';
 
 export class CapacityExceededException extends DomainException {
   constructor(eventId: string) {

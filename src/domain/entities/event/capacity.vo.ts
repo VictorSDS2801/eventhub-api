@@ -1,4 +1,4 @@
-import { DomainException } from '../exceptions/domain.exception';
+import { DomainException } from '../../exceptions/domain.exception';
 
 export class InvalidCapacityException extends DomainException {
   constructor(reason: string) {

@@ -8,11 +8,11 @@ import {
   I_EVENT_REPOSITORY,
   IEventRepository,
 } from '../repositories/event.repository.interface';
-import { Event } from '../entities/event';
-import { Capacity } from '../entities/capacity.vo';
+import { Event } from '../entities/event/event';
+import { Capacity } from '../entities/event/capacity.vo';
 import { Enrollment } from '../entities/enrollment';
 import { DuplicateEnrollmentException } from '../exceptions/duplicate-enrollment.exception';
-import { EventNotFoundException } from '../exceptions/event-not-found.exception';
+import { EventNotFoundException } from '../exceptions/event/event-not-found.exception';
 import { EnrollmentNotFoundException } from '../exceptions/enrollment-not-found.exception';
 
 describe('EnrollmentService', () => {

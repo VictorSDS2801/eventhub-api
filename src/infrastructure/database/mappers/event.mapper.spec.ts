@@ -1,7 +1,6 @@
-// src/infrastructure/database/mappers/event.mapper.spec.ts
 import { EventMapper } from './event.mapper';
-import { Event } from '../../../domain/entities/event';
-import { Capacity } from '../../../domain/entities/capacity.vo';
+import { Event } from '../../../domain/entities/event/event';
+import { Capacity } from '../../../domain/entities/event/capacity.vo';
 import { EventDocument } from '../schemas/event.schema';
 
 describe('EventMapper', () => {

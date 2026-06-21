@@ -1,9 +1,9 @@
-import { Event } from '../../../domain/entities/event';
-import { Capacity } from '../../../domain/entities/capacity.vo';
+import { Event } from '../../../domain/entities/event/event';
+import { Capacity } from '../../../domain/entities/event/capacity.vo';
 import {
   EventStatus,
   EventStatusEnum,
-} from '../../../domain/entities/event-status.vo';
+} from '../../../domain/entities/event/event-status.vo';
 import { EventDocument } from '../schemas/event.schema';
 
 export class EventMapper {

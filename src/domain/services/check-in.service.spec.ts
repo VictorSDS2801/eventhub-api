@@ -12,14 +12,14 @@ import {
   I_EVENT_REPOSITORY,
   IEventRepository,
 } from '../repositories/event.repository.interface';
-import { Event } from '../entities/event';
-import { Capacity } from '../entities/capacity.vo';
+import { Event } from '../entities/event/event';
+import { Capacity } from '../entities/event/capacity.vo';
 import { Enrollment } from '../entities/enrollment';
 import { EnrollmentNotConfirmedException } from '../exceptions/enrollment-not-confirmed.exception';
 import { DuplicateCheckInException } from '../exceptions/duplicate-checkin.exception';
 import { EnrollmentNotFoundException } from '../exceptions/enrollment-not-found.exception';
 import { CheckInWindowClosedException } from '../exceptions/checkin-window-closed.exception';
-import { EventStatus } from '../entities/event-status.vo';
+import { EventStatus } from '../entities/event/event-status.vo';
 
 describe('CheckInService', () => {
   let service: CheckInService;

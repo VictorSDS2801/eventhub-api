@@ -21,7 +21,7 @@ export class EnrollmentSchemaClass {
   })
   status!: string;
 
-  @Prop({ required: false, default: null })
+  @Prop({ type: Number, required: false, default: null })
   waitlistPosition!: number | null;
 
   @Prop({ required: true })

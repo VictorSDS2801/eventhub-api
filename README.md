@@ -1,98 +1,200 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# EventHub API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+[![CI](https://github.com/VictorSDS2801/eventhub-api/actions/workflows/ci.yml/badge.svg)](https://github.com/VictorSDS2801/eventhub-api/actions/workflows/ci.yml)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?logo=typescript&logoColor=white)
+![NestJS](https://img.shields.io/badge/NestJS-11-E0234E?logo=nestjs&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-8.0-47A248?logo=mongodb&logoColor=white)
+![Redis](https://img.shields.io/badge/Redis-7.2-DC382D?logo=redis&logoColor=white)
+![License](https://img.shields.io/badge/license-MIT-green)
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+> 🇧🇷 [Leia em Português](./README.pt-BR.md)
 
-## Description
+A robust event registration and management platform built with **Clean Architecture**, **Domain-Driven Design (DDD)**, and a full async notification pipeline.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Overview
 
-## Project setup
+EventHub is a portfolio project designed to demonstrate production-grade backend architecture. Users can create events, manage registrations with automatic waitlist promotion, perform check-ins, and receive email notifications — all backed by a clean, testable domain layer.
 
-```bash
-$ npm install
+**Key features:**
+- JWT authentication with Role-Based Access Control (RBAC)
+- Event management with capacity control
+- Enrollment with automatic waitlist queue and late cancellation rules
+- Event check-in with time window validation
+- Async email notifications via BullMQ + Nodemailer (Ethereal)
+- Redis cache on event listings (cache-aside pattern)
+- Modular monolith architecture — domain boundaries drawn for future microservice extraction
+
+## Architecture
+
+```
+src/
+├── application/          # HTTP layer (controllers, DTOs)
+│   ├── controllers/
+│   │   ├── auth/
+│   │   ├── event/
+│   │   ├── enrollment/
+│   │   └── check-in/
+│   └── dtos/
+│       ├── auth/
+│       ├── event/
+│       ├── enrollment/
+│       └── check-in/
+├── domain/               # Business logic (pure, no framework dependencies)
+│   ├── entities/
+│   │   ├── event/        # Event, Capacity VO, EventStatus VO
+│   │   ├── enrollment/   # Enrollment, EnrollmentStatus VO
+│   │   ├── user/         # User, Email VO, Role VO
+│   │   └── check-in/     # CheckIn
+│   ├── services/         # Use cases (orchestrate entities + repositories)
+│   ├── repositories/     # Repository interfaces (ports)
+│   ├── ports/            # External integration interfaces (cache, notification, token, password)
+│   └── exceptions/       # Domain-specific exceptions
+└── infrastructure/       # Framework + external adapters
+    ├── database/         # Mongoose schemas, mappers, repository implementations
+    ├── adapters/         # Redis cache, BullMQ notification, bcrypt, JWT
+    ├── queue/            # BullMQ worker (email processor)
+    └── shared/           # Guards, decorators, config
+
+test/
+└── unit/                 # Unit tests mirroring src/ structure
 ```
 
-## Compile and run the project
+### Dependency rule
 
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+```
+Presentation → Application → Domain ← Infrastructure
 ```
 
-## Run tests
+The domain layer has zero dependencies on frameworks or infrastructure. Repositories and external ports are defined as interfaces in the domain and implemented in the infrastructure layer, injected via NestJS DI tokens.
+
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Framework | NestJS + TypeScript |
+| Database | MongoDB + Mongoose |
+| Cache | Redis (ioredis) |
+| Queue | BullMQ |
+| Email | Nodemailer + Ethereal (test) |
+| Auth | JWT (RS256 via @nestjs/jwt) |
+| Password hashing | bcrypt |
+| Testing | Jest (unit tests, 60+ tests) |
+| CI | GitHub Actions |
+| Containers | Docker Compose (MongoDB + Redis) |
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 20+
+- npm
+- Docker + Docker Compose
+
+### 1. Clone the repository
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+git clone https://github.com/VictorSDS2801/eventhub-api.git
+cd eventhub-api
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+### 2. Install dependencies
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+npm install
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+### 3. Configure environment variables
 
-## Resources
+```bash
+cp .env.example .env
+```
 
-Check out a few resources that may come in handy when working with NestJS:
+Edit `.env` and set your values (the defaults work for local development):
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+```env
+PORT=3000
+NODE_ENV=development
+MONGODB_URI=mongodb://localhost:27017/eventhub
+REDIS_URL=redis://localhost:6379
+JWT_SECRET=your-secret-here
+JWT_EXPIRES_IN=1d
+CACHE_TTL_SECONDS=60
+```
 
-## Support
+### 4. Start infrastructure (MongoDB + Redis)
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```bash
+docker compose up -d
+```
 
-## Stay in touch
+### 5. Run the application
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+```bash
+npm run start:dev
+```
+
+The API will be available at `http://localhost:3000`.
+
+### 6. Run tests
+
+```bash
+npm run test
+```
+
+## API Overview
+
+### Auth
+| Method | Endpoint | Description | Auth |
+|---|---|---|---|
+| POST | `/auth/register` | Register a user | — |
+| POST | `/auth/login` | Authenticate and get JWT | — |
+
+### Events
+| Method | Endpoint | Description | Auth |
+|---|---|---|---|
+| POST | `/events` | Create an event | ORGANIZER / ADMIN |
+| GET | `/events` | List events (cached) | — |
+| GET | `/events/:id` | Get event by ID | — |
+| PATCH | `/events/:id/publish` | Publish an event | ORGANIZER / ADMIN |
+| PATCH | `/events/:id/cancel` | Cancel an event | ORGANIZER / ADMIN |
+
+### Enrollments
+| Method | Endpoint | Description | Auth |
+|---|---|---|---|
+| POST | `/enrollments` | Enroll in an event | Any authenticated user |
+| PATCH | `/enrollments/:id/cancel` | Cancel enrollment | Any authenticated user |
+| GET | `/enrollments/event/:eventId` | List enrollments for event | Any authenticated user |
+
+### Check-in
+| Method | Endpoint | Description | Auth |
+|---|---|---|---|
+| POST | `/check-ins/enrollment/:enrollmentId` | Perform check-in | Any authenticated user |
+| GET | `/check-ins/event/:eventId` | List check-ins for event | Any authenticated user |
+
+## Key Domain Rules
+
+**Enrollment with waitlist:**
+When an event reaches full capacity, new enrollments are automatically placed on a waiting list with a sequential position. When a confirmed enrollment is cancelled, the first person on the waitlist is automatically promoted and notified by email.
+
+**Late cancellation rule:**
+Cancellations made within 12 hours of the event start time will not trigger automatic waitlist promotion. The spot is released but no one is promoted — not enough time for a substitute to prepare.
+
+**Check-in window:**
+Check-in is only allowed during the event's time window (between `startDate` and `endDate`). Duplicate check-ins for the same enrollment are rejected.
+
+**Cache invalidation:**
+The event listing endpoint is cached in Redis with a 60-second TTL. The cache is invalidated whenever an event is created, published, or cancelled, ensuring consistency.
+
+## Architectural Decisions
+
+**Modular monolith over microservices:** The domain boundaries (Identity, Event, Enrollment, Check-in) are drawn as clearly separated contexts, but run in a single process. This was a deliberate choice — the bounded contexts are clean enough to extract into microservices if scale ever requires it, but the operational complexity of distributed systems is not justified for this stage.
+
+**Cache in the Application layer, not the Domain:** The `EventController` owns the cache logic (reading/writing `EventResponseDto`), not the `EventService`. This keeps the domain layer free of infrastructure concerns, respecting the dependency rule.
+
+**`create()` vs `restore()` on entities:** Every aggregate has two factory methods. `create()` applies all business invariants (e.g., "event start date cannot be in the past"). `restore()` reconstructs an existing aggregate from persistence without re-applying creation rules — used by mappers and tests simulating existing state.
+
+**Ports & Adapters for all external dependencies:** bcrypt, JWT, Redis, and BullMQ are never imported directly in the domain. Each has an interface (port) in the domain layer and a concrete adapter in infrastructure. This makes the domain 100% testable with mocks and decoupled from specific libraries.
 
 ## License
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+MIT — feel free to use this project as a reference or starting point.

@@ -4,13 +4,17 @@ import { I_ENROLLMENT_REPOSITORY } from '../../../../../src/domain/repositories/
 import type { IEnrollmentRepository } from '../../../../../src/domain/repositories/enrollment.repository.interface';
 import { I_EVENT_REPOSITORY } from '../../../../../src/domain/repositories/event.repository.interface';
 import type { IEventRepository } from '../../../../../src/domain/repositories/event.repository.interface';
+import { I_USER_REPOSITORY } from '../../../../../src/domain/repositories/user.repository.interface';
+import type { IUserRepository } from '../../../../../src/domain/repositories/user.repository.interface';
+import { I_NOTIFICATION_PORT } from '../../../../../src/domain/ports/notification.port';
+import type { INotificationPort } from '../../../../../src/domain/ports/notification.port';
 import { Event } from '../../../../../src/domain/entities/event/event';
+import { EventStatus } from '../../../../../src/domain/entities/event/event-status.vo';
 import { Capacity } from '../../../../../src/domain/entities/event/capacity.vo';
 import { Enrollment } from '../../../../../src/domain/entities/enrollment/enrollment';
 import { DuplicateEnrollmentException } from '../../../../../src/domain/exceptions/enrollment/duplicate-enrollment.exception';
 import { EventNotFoundException } from '../../../../../src/domain/exceptions/event/event-not-found.exception';
 import { EnrollmentNotFoundException } from '../../../../../src/domain/exceptions/enrollment/enrollment-not-found.exception';
-import { EventStatus } from '../../../../../src/domain/entities/event/event-status.vo';
 
 describe('EnrollmentService', () => {
   let service: EnrollmentService;
@@ -45,6 +49,16 @@ describe('EnrollmentService', () => {
       findAll: jest.fn(),
       delete: jest.fn(),
     };
+    const mockUserRepository: jest.Mocked<IUserRepository> = {
+      save: jest.fn(),
+      findById: jest.fn(),
+      findByEmail: jest.fn(),
+    };
+    const mockNotificationPort: jest.Mocked<INotificationPort> = {
+      enqueueEnrollmentConfirmed: jest.fn(),
+      enqueueEnrollmentWaitlisted: jest.fn(),
+      enqueueWaitlistPromoted: jest.fn(),
+    };
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -54,6 +68,8 @@ describe('EnrollmentService', () => {
           useValue: mockEnrollmentRepository,
         },
         { provide: I_EVENT_REPOSITORY, useValue: mockEventRepository },
+        { provide: I_USER_REPOSITORY, useValue: mockUserRepository },
+        { provide: I_NOTIFICATION_PORT, useValue: mockNotificationPort },
       ],
     }).compile();
 
@@ -76,12 +92,12 @@ describe('EnrollmentService', () => {
       });
 
       expect(result.getStatus().isConfirmed()).toBe(true);
-      expect(event.getCapacity().getOccupied()).toBe(1); // vaga foi ocupada de verdade
+      expect(event.getCapacity().getOccupied()).toBe(1);
     });
 
     it('deve colocar em lista de espera quando não há vagas disponíveis', async () => {
       const event = buildEvent(1);
-      event.occupySpot(); // lota o evento propositalmente
+      event.occupySpot();
       eventRepository.findById.mockResolvedValue(event);
       enrollmentRepository.findByEventAndUser.mockResolvedValue(null);
       enrollmentRepository.countWaitlistedByEvent.mockResolvedValue(0);
@@ -101,7 +117,7 @@ describe('EnrollmentService', () => {
       event.occupySpot();
       eventRepository.findById.mockResolvedValue(event);
       enrollmentRepository.findByEventAndUser.mockResolvedValue(null);
-      enrollmentRepository.countWaitlistedByEvent.mockResolvedValue(3); // já tem 3 na fila
+      enrollmentRepository.countWaitlistedByEvent.mockResolvedValue(3);
       enrollmentRepository.save.mockImplementation((e) => Promise.resolve(e));
 
       const result = await service.enroll({
@@ -136,7 +152,7 @@ describe('EnrollmentService', () => {
   describe('cancel', () => {
     it('deve cancelar uma inscrição confirmada e promover o próximo da lista de espera', async () => {
       const event = buildEvent(1);
-      event.occupySpot(); // única vaga ocupada por quem vai cancelar
+      event.occupySpot();
 
       const cancellingEnrollment = Enrollment.createConfirmed({
         eventId: event.id,
@@ -159,7 +175,7 @@ describe('EnrollmentService', () => {
       expect(result.cancelled.getStatus().isCancelled()).toBe(true);
       expect(result.promoted).not.toBeNull();
       expect(result.promoted?.getStatus().isConfirmed()).toBe(true);
-      expect(event.getCapacity().getOccupied()).toBe(1); // vaga liberada e reocupada pelo suplente
+      expect(event.getCapacity().getOccupied()).toBe(1);
     });
 
     it('deve cancelar sem promover ninguém se não houver lista de espera', async () => {
@@ -181,7 +197,7 @@ describe('EnrollmentService', () => {
 
       expect(result.cancelled.getStatus().isCancelled()).toBe(true);
       expect(result.promoted).toBeNull();
-      expect(event.getCapacity().getOccupied()).toBe(0); // vaga liberada, ninguém ocupou
+      expect(event.getCapacity().getOccupied()).toBe(0);
     });
 
     it('não deve mexer na capacidade ao cancelar uma inscrição que já estava em lista de espera', async () => {
@@ -201,7 +217,7 @@ describe('EnrollmentService', () => {
 
       expect(result.cancelled.getStatus().isCancelled()).toBe(true);
       expect(result.promoted).toBeNull();
-      expect(eventRepository.findById).not.toHaveBeenCalled(); // nem precisou buscar o evento
+      expect(eventRepository.findById).not.toHaveBeenCalled();
     });
 
     it('deve lançar erro se a inscrição não existir', async () => {
@@ -218,9 +234,9 @@ describe('EnrollmentService', () => {
         title: 'Evento próximo',
         description: 'desc',
         organizerId: 'organizer-1',
-        startDate: new Date(Date.now() + 6 * 60 * 60 * 1000), // começa em 6h (dentro da janela de 12h)
+        startDate: new Date(Date.now() + 6 * 60 * 60 * 1000),
         endDate: new Date(Date.now() + 10 * 60 * 60 * 1000),
-        capacity: Capacity.restore(1, 1), // única vaga, ocupada
+        capacity: Capacity.restore(1, 1),
         status: EventStatus.published(),
         createdAt: new Date(),
       });
@@ -228,11 +244,6 @@ describe('EnrollmentService', () => {
       const cancellingEnrollment = Enrollment.createConfirmed({
         eventId: nearEvent.id,
         userId: 'user-1',
-      });
-      const waitlisted = Enrollment.createWaitlisted({
-        eventId: nearEvent.id,
-        userId: 'user-2',
-        waitlistPosition: 1,
       });
 
       enrollmentRepository.findById.mockResolvedValue(cancellingEnrollment);
@@ -244,8 +255,8 @@ describe('EnrollmentService', () => {
 
       expect(result.cancelled.getStatus().isCancelled()).toBe(true);
       expect(result.promoted).toBeNull();
-      expect(nearEvent.getCapacity().getOccupied()).toBe(0); // vaga liberada, mas não reocupada
-      expect(enrollmentRepository.findNextWaitlisted).not.toHaveBeenCalled(); // nem chegou a buscar suplente
+      expect(nearEvent.getCapacity().getOccupied()).toBe(0);
+      expect(enrollmentRepository.findNextWaitlisted).not.toHaveBeenCalled();
     });
 
     it('deve promover suplente se o cancelamento ocorrer fora da janela de 12h', async () => {
@@ -254,7 +265,7 @@ describe('EnrollmentService', () => {
         title: 'Evento distante',
         description: 'desc',
         organizerId: 'organizer-1',
-        startDate: new Date(Date.now() + 48 * 60 * 60 * 1000), // começa em 48h (fora da janela)
+        startDate: new Date(Date.now() + 48 * 60 * 60 * 1000),
         endDate: new Date(Date.now() + 52 * 60 * 60 * 1000),
         capacity: Capacity.restore(1, 1),
         status: EventStatus.published(),
@@ -281,7 +292,7 @@ describe('EnrollmentService', () => {
 
       expect(result.promoted).not.toBeNull();
       expect(result.promoted?.getStatus().isConfirmed()).toBe(true);
-      expect(farEvent.getCapacity().getOccupied()).toBe(1); // vaga liberada e reocupada pelo suplente
+      expect(farEvent.getCapacity().getOccupied()).toBe(1);
     });
   });
 });

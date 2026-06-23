@@ -14,6 +14,7 @@ import { DuplicateCheckInException } from '../../../../../src/domain/exceptions/
 import { EnrollmentNotFoundException } from '../../../../../src/domain/exceptions/enrollment/enrollment-not-found.exception';
 import { CheckInWindowClosedException } from '../../../../../src/domain/exceptions/check-in/checkin-window-closed.exception';
 import { EventStatus } from '../../../../../src/domain/entities/event/event-status.vo';
+import { CheckIn } from '../../../../../src/domain/entities/check-in/check-in';
 
 describe('CheckInService', () => {
   let service: CheckInService;
@@ -119,7 +120,13 @@ describe('CheckInService', () => {
       userId: 'user-1',
     });
     enrollmentRepository.findById.mockResolvedValue(enrollment);
-    checkInRepository.findByEnrollmentId.mockResolvedValue({} as any); // já existe
+    const fakeCheckIn = CheckIn.restore({
+      id: 'fake-checkin-id',
+      enrollmentId: 'enrollment-1',
+      eventId: 'event-1',
+      checkedInAt: new Date(),
+    });
+    checkInRepository.findByEnrollmentId.mockResolvedValue(fakeCheckIn);
 
     await expect(service.checkIn(enrollment.id)).rejects.toThrow(
       DuplicateCheckInException,

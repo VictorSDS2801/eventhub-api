@@ -1,3 +1,4 @@
+// src/main.ts
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
@@ -19,4 +20,8 @@ async function bootstrap() {
   await app.listen(port);
   console.log(`🚀 Application running on: http://localhost:${port}`);
 }
-bootstrap();
+
+bootstrap().catch((err) => {
+  console.error('Erro ao iniciar a aplicação:', err);
+  process.exit(1);
+});

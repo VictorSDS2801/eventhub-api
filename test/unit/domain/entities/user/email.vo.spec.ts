@@ -1,4 +1,7 @@
-import { Email, InvalidEmailException } from '../../../../../src/domain/entities/user/email.vo';
+import {
+  Email,
+  InvalidEmailException,
+} from '../../../../../src/domain/entities/user/email.vo';
 
 describe('Email', () => {
   it('deve criar um e-mail válido', () => {
@@ -17,7 +20,9 @@ describe('Email', () => {
   });
 
   it('deve lançar erro para e-mail sem @', () => {
-    expect(() => Email.create('victorexample.com')).toThrow(InvalidEmailException);
+    expect(() => Email.create('victorexample.com')).toThrow(
+      InvalidEmailException,
+    );
   });
 
   it('deve lançar erro para e-mail sem domínio', () => {

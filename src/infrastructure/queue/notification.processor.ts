@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-enum-comparison */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import {
   Injectable,
   OnModuleInit,
@@ -21,13 +24,12 @@ import type {
 @Injectable()
 export class NotificationProcessor implements OnModuleInit, OnModuleDestroy {
   private readonly logger = new Logger(NotificationProcessor.name);
-  private worker: Worker;
-  private transporter: nodemailer.Transporter;
+  private worker!: Worker;
+  private transporter!: nodemailer.Transporter;
 
   constructor(private readonly configService: ConfigService) {}
 
   async onModuleInit(): Promise<void> {
-    // cria conta Ethereal automaticamente (sem precisar de cadastro)
     const testAccount = await nodemailer.createTestAccount();
 
     this.transporter = nodemailer.createTransport({
@@ -67,19 +69,22 @@ export class NotificationProcessor implements OnModuleInit, OnModuleDestroy {
 
   private async processJob(job: Job): Promise<void> {
     switch (job.name) {
-      case NotificationJobType.ENROLLMENT_CONFIRMED:
+      case NotificationJobType.ENROLLMENT_CONFIRMED: {
         await this.sendEnrollmentConfirmed(
           job.data as IEnrollmentConfirmedPayload,
         );
         break;
-      case NotificationJobType.ENROLLMENT_WAITLISTED:
+      }
+      case NotificationJobType.ENROLLMENT_WAITLISTED: {
         await this.sendEnrollmentWaitlisted(
           job.data as IEnrollmentWaitlistedPayload,
         );
         break;
-      case NotificationJobType.WAITLIST_PROMOTED:
+      }
+      case NotificationJobType.WAITLIST_PROMOTED: {
         await this.sendWaitlistPromoted(job.data as IWaitlistPromotedPayload);
         break;
+      }
       default:
         this.logger.warn(`Job desconhecido: ${job.name}`);
     }
@@ -104,7 +109,9 @@ export class NotificationProcessor implements OnModuleInit, OnModuleDestroy {
     this.logger.log(
       `📧 E-mail de confirmação enviado para ${payload.userEmail}`,
     );
-    this.logger.log(`🔗 Visualize em: ${nodemailer.getTestMessageUrl(info)}`);
+    this.logger.log(
+      `🔗 Visualize em: ${String(nodemailer.getTestMessageUrl(info))}`,
+    );
   }
 
   private async sendEnrollmentWaitlisted(
@@ -127,7 +134,9 @@ export class NotificationProcessor implements OnModuleInit, OnModuleDestroy {
     this.logger.log(
       `📧 E-mail de lista de espera enviado para ${payload.userEmail}`,
     );
-    this.logger.log(`🔗 Visualize em: ${nodemailer.getTestMessageUrl(info)}`);
+    this.logger.log(
+      `🔗 Visualize em: ${String(nodemailer.getTestMessageUrl(info))}`,
+    );
   }
 
   private async sendWaitlistPromoted(
@@ -147,7 +156,9 @@ export class NotificationProcessor implements OnModuleInit, OnModuleDestroy {
     });
 
     this.logger.log(`📧 E-mail de promoção enviado para ${payload.userEmail}`);
-    this.logger.log(`🔗 Visualize em: ${nodemailer.getTestMessageUrl(info)}`);
+    this.logger.log(
+      `🔗 Visualize em: ${String(nodemailer.getTestMessageUrl(info))}`,
+    );
   }
 
   async onModuleDestroy(): Promise<void> {
